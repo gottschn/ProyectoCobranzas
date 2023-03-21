@@ -76,7 +76,8 @@ builder.Services.AddScoped<IAlumnoCarreraServicio, AlumnoCarreraServicio>();
 
 // DB Configuración
 builder.Services.AddDbContext<DataContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CobranzasDB"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("CobranzasDB"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("CobranzasDbSqlite"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 );
@@ -91,8 +92,16 @@ var app = builder.Build();
 //    _context.Database.Migrate();
 
 //}
-
 // Configure the HTTP request pipeline.
+
+app.UseCors(x =>
+{
+    x.AllowAnyHeader();
+    x.AllowAnyMethod();
+    x.AllowAnyOrigin();
+});
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
