@@ -3,7 +3,6 @@ using System;
 using Infraestructura.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,36 +11,54 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230103184935_RestructureDB01-0002")]
-    partial class RestructureDB010002
+    [Migration("20230315122333_inicial")]
+    partial class inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.Entity("Dominio.Entidades.AlumnoCarrera", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("AlumnoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("CarreraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EstaEliminado")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlumnoId");
+
+                    b.HasIndex("CarreraId");
+
+                    b.ToTable("AlumnoCarrera");
+                });
 
             modelBuilder.Entity("Dominio.Entidades.Carrera", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("CantidadCuotas")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -52,31 +69,34 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AlumnoId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EstadoCuota")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Monto")
+                    b.Property<decimal>("MontoAbonado")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Numero")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("Rol")
-                        .HasColumnType("int");
+                    b.Property<long>("PrecioCuotaId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlumnoId");
+
+                    b.HasIndex("PrecioCuotaId");
 
                     b.ToTable("Cuota");
                 });
@@ -85,18 +105,16 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("CuotaId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FechaPago")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
@@ -112,36 +130,34 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Dni")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Mail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -154,18 +170,16 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("CarreraId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
@@ -181,29 +195,27 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Codigo")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("EntidadMovimiento")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("UsuarioId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -216,26 +228,24 @@ namespace Infraestructura.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("EstaEliminado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("PersonaId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Rol")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -248,16 +258,11 @@ namespace Infraestructura.Migrations
                 {
                     b.HasBaseType("Dominio.Entidades.Persona");
 
-                    b.Property<long>("CarreraId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("FechaIngreso")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Legajo")
-                        .HasColumnType("int");
-
-                    b.HasIndex("CarreraId");
+                        .HasColumnType("INTEGER");
 
                     b.ToTable("Persona_Alumno");
                 });
@@ -268,9 +273,28 @@ namespace Infraestructura.Migrations
 
                     b.Property<string>("AreaTrabajo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.ToTable("Persona_Empleado");
+                });
+
+            modelBuilder.Entity("Dominio.Entidades.AlumnoCarrera", b =>
+                {
+                    b.HasOne("Dominio.Entidades.Alumno", "Alumno")
+                        .WithMany("AlumnoCarreras")
+                        .HasForeignKey("AlumnoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Dominio.Entidades.Carrera", "Carrera")
+                        .WithMany("AlumnoCarreras")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Alumno");
+
+                    b.Navigation("Carrera");
                 });
 
             modelBuilder.Entity("Dominio.Entidades.Cuota", b =>
@@ -278,10 +302,18 @@ namespace Infraestructura.Migrations
                     b.HasOne("Dominio.Entidades.Alumno", "Alumno")
                         .WithMany("Cuotas")
                         .HasForeignKey("AlumnoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Dominio.Entidades.PrecioCuota", "PrecioCuota")
+                        .WithMany("Cuotas")
+                        .HasForeignKey("PrecioCuotaId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Alumno");
+
+                    b.Navigation("PrecioCuota");
                 });
 
             modelBuilder.Entity("Dominio.Entidades.Pago", b =>
@@ -289,7 +321,7 @@ namespace Infraestructura.Migrations
                     b.HasOne("Dominio.Entidades.Cuota", "Cuota")
                         .WithMany("Pagos")
                         .HasForeignKey("CuotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cuota");
@@ -300,7 +332,7 @@ namespace Infraestructura.Migrations
                     b.HasOne("Dominio.Entidades.Carrera", "Carrera")
                         .WithMany()
                         .HasForeignKey("CarreraId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Carrera");
@@ -311,7 +343,7 @@ namespace Infraestructura.Migrations
                     b.HasOne("Dominio.Entidades.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Usuario");
@@ -322,7 +354,7 @@ namespace Infraestructura.Migrations
                     b.HasOne("Dominio.Entidades.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("PersonaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Persona");
@@ -330,19 +362,11 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("Dominio.Entidades.Alumno", b =>
                 {
-                    b.HasOne("Dominio.Entidades.Carrera", "Carrera")
-                        .WithMany()
-                        .HasForeignKey("CarreraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Dominio.Entidades.Persona", null)
                         .WithOne()
                         .HasForeignKey("Dominio.Entidades.Alumno", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Carrera");
                 });
 
             modelBuilder.Entity("Dominio.Entidades.Empleado", b =>
@@ -354,13 +378,25 @@ namespace Infraestructura.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Dominio.Entidades.Carrera", b =>
+                {
+                    b.Navigation("AlumnoCarreras");
+                });
+
             modelBuilder.Entity("Dominio.Entidades.Cuota", b =>
                 {
                     b.Navigation("Pagos");
                 });
 
+            modelBuilder.Entity("Dominio.Entidades.PrecioCuota", b =>
+                {
+                    b.Navigation("Cuotas");
+                });
+
             modelBuilder.Entity("Dominio.Entidades.Alumno", b =>
                 {
+                    b.Navigation("AlumnoCarreras");
+
                     b.Navigation("Cuotas");
                 });
 #pragma warning restore 612, 618
