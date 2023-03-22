@@ -76,7 +76,6 @@ builder.Services.AddScoped<IAlumnoCarreraServicio, AlumnoCarreraServicio>();
 
 // DB Configuración
 builder.Services.AddDbContext<DataContext>(options => {
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("CobranzasDB"));
     options.UseSqlite(builder.Configuration.GetConnectionString("CobranzasDbSqlite"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
